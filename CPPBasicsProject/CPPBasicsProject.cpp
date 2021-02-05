@@ -1,98 +1,38 @@
 ﻿
 #include <iostream>
+#include <string>
 
 using namespace std;
 
+extern int a, b, c, d;
+
 int main()
 {
-    // #1
-    short int shortIntVar = 32'767;
-    int intVar = 2'147'483'647;
-    long long longLongVar = 9'223'372'036'854'775'807;
-    char charVar = 'a';
-    bool boolVar = true;
-    float floatVar = 123.456;
-    double doulbeVar = 1.7E+308;
-
     // #2
-    enum TicTacToeEnum { TICTACTOE_EMPTY, TICTACTOE_X, TICTACTOE_O };
+    int number, diff;
 
-    // #3
-    TicTacToeEnum ticTacToeArr[3];
+    cout << "Enter the number: ";
+    cin >> number;
 
-    ticTacToeArr[0] = TICTACTOE_X;
-    ticTacToeArr[1] = TICTACTOE_X;
-    ticTacToeArr[2] = TICTACTOE_O;
+    diff = number <= 21 ? number - 21 : (number - 21) * 2;
 
-    // #4*
-    struct TicTacToeField
-    {
-        TicTacToeEnum grid[3][3];
-        bool isXsTurn;
-        bool isXWin;
-        bool isOWin;
+    cout << diff << endl << endl;
+
+    // #3*
+    int * arrPtr, array[3][3][3] = {
+        { {10, 11, 12}, {13, 14, 15}, {16, 17, 18} },
+        { {19, 20, 21}, {22, 23, 24}, {25, 26, 27} },
+        { {28, 29, 30}, {31, 32, 33}, {34, 35, 36} }
     };
 
-    TicTacToeField field = 
-    {
-        {
-            { TICTACTOE_X, TICTACTOE_O, TICTACTOE_EMPTY },      // X O -
-            { TICTACTOE_EMPTY, TICTACTOE_X, TICTACTOE_O },      // - X O
-            { TICTACTOE_EMPTY, TICTACTOE_EMPTY, TICTACTOE_X }   // - - X
-        },
-        false,
-        true,
-        false
-    };
+    arrPtr = &array[1][1][1];
 
-    cout << field.grid[1][1] << " "; // Центральная клетка со значением X, т.е. 1
-    cout << field.grid[2][1] << " "; // Нижняя центральная клетка с пустым значением, т.е. 0
-    cout << field.isXWin << " "; // X победил, значит здесь true, т.е. 1
-    cout << field.isOWin << endl << endl; // А O проиграл, значит здесь false, т.е. 0
-    // Итоговый вывод должен быть 1 0 1 0
+    cout << *arrPtr << endl << endl; // Должно быть 23
 
-    // #5**
-    union IntFloatCharUnion
-    {
-        int intVar;
-        float floatVar;
-        char charVar;
-    };
-    struct UnionStructure
-    {
-        IntFloatCharUnion typeUnion;
-        bool isInt;
-        bool isFloat;
-        bool isChar;
-    };
+    // #4**
+    float result = a * (b + (static_cast<float>(c) / d)); // Должно быть 20.25
 
-    UnionStructure someStructure;
-    someStructure.typeUnion.floatVar = 3.14; // Инициализируем float-значение
-    someStructure.isFloat = true; // И ставим соответствующий флаг
-
-    cout << someStructure.typeUnion.floatVar << " " << someStructure.isFloat << endl << endl;
-
-    someStructure.typeUnion.charVar = 'z'; // Теперь используем char-значение
-    someStructure.isFloat = false; // Ставим соответствующий флаг
-    someStructure.isChar = true; // И убираем устаревший флаг
-
-    cout << someStructure.typeUnion.floatVar << " " << someStructure.isFloat << endl; // Теперь вместо 3.14 будет мусор и isFloat = 0
-    cout << someStructure.typeUnion.charVar << " " << someStructure.isChar << endl << endl;
-
-    // Забегая вперед, к условиям, можно использовать примерно такие структуры
-    someStructure.isInt = false;
-    if (someStructure.isInt)
-    {
-        cout << someStructure.typeUnion.intVar << endl;
-    }
-    else if (someStructure.isFloat)
-    {
-        cout << someStructure.typeUnion.floatVar << endl;
-    }
-    else if (someStructure.isChar)
-    {
-        cout << someStructure.typeUnion.charVar << endl;
-    }
+    cout << result << endl;
 
     return 0;
 }
