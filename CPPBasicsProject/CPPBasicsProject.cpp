@@ -1,38 +1,134 @@
 ﻿
 #include <iostream>
-#include <string>
 
 using namespace std;
 
-extern int a, b, c, d;
-
 int main()
 {
+    // #1
+    cout << "Task #1" << endl;
+
+    int a, b;
+
+    cout << "Enter number A: ";
+    cin >> a;
+    cout << "Enter number B: ";
+    cin >> b;
+
+    cout << "Is number in 10-20 range: ";
+    if (a + b > 9 && a + b < 21)
+    {
+        cout << "True" << endl;
+    }
+    else
+    {
+        cout << "False" << endl;
+    }
+
+    cout << endl;
+
     // #2
-    int number, diff;
+    cout << "Task #2" << endl;
 
-    cout << "Enter the number: ";
-    cin >> number;
+    const int c = 7;
+    const int d = 3;
 
-    diff = number <= 21 ? number - 21 : (number - 21) * 2;
+    if ((c == 10 && d == 10) || c + d == 10)
+    {
+        cout << "True" << endl;
+    }
+    else
+    {
+        cout << "False" << endl;
+    }
 
-    cout << diff << endl << endl;
+    cout << endl;
 
-    // #3*
-    int * arrPtr, array[3][3][3] = {
-        { {10, 11, 12}, {13, 14, 15}, {16, 17, 18} },
-        { {19, 20, 21}, {22, 23, 24}, {25, 26, 27} },
-        { {28, 29, 30}, {31, 32, 33}, {34, 35, 36} }
-    };
+    // #3
+    cout << "Task #3" << endl;
 
-    arrPtr = &array[1][1][1];
+    cout << "Odd numbers: ";
+    for (int i = 1; i <= 50; i++)
+    {
+        if (i % 2 == 1)
+        {
+            cout << i << " ";
+        }
+    }
 
-    cout << *arrPtr << endl << endl; // Должно быть 23
+    cout << endl << endl;
 
-    // #4**
-    float result = a * (b + (static_cast<float>(c) / d)); // Должно быть 20.25
+    // #4*
+    cout << "Task #4*" << endl;
 
-    cout << result << endl;
+    unsigned int prime;
+    cout << "Enter number: ";
+    cin >> prime;
+
+    bool isPrime = true;
+    for (size_t i = 2; i < prime; i++)
+    {
+        if (prime % i == 0)
+        {
+            isPrime = false;
+        }
+    }
+
+    cout << "Is number is Prime: ";
+    if (isPrime)
+    {
+        cout << "True" << endl;
+    }
+    else
+    {
+        cout << "False" << endl;
+    }
+
+    cout << endl;
+
+    // #5*
+    cout << "Task #5*" << endl;
+
+    unsigned short year;
+    while (true) // Цикл для проверки того, что ввели число именно из диапазона 1-3000
+    {
+        cout << "Enter a Year (1-3000): ";
+        cin >> year;
+
+        if (year >= 1 && year <= 3000) {
+            break;
+        }
+        else
+        {
+            cout << "Year is not in 1-3000 range" << endl << "Please Re";
+        }
+    }
+
+    bool isLeap = true;
+    if (year % 4 == 0) // Если делится без остатка на 4, то идем дальше
+    {
+        if (year % 100 == 0) // Если делится без остатка на 100, то нужно проверить, не 400 ли это
+        {
+            if (year % 400 != 0)
+            {
+                isLeap = false;
+            }
+        }
+    }
+    else
+    {
+        isLeap = false;
+    }
+
+    cout << "Year is Leap: ";
+    if (isLeap)
+    {
+        cout << "True" << endl;
+    }
+    else
+    {
+        cout << "False" << endl;
+    }
 
     return 0;
 }
