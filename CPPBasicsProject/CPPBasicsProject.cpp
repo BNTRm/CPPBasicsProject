@@ -1,19 +1,18 @@
 ﻿
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
-void printArray(double arr[], unsigned size)
+void fillArrWithPowsOfTwo(int* arr, short size)
 {
     for (size_t i = 0; i < size; i++)
     {
-        cout << arr[i] << " ";
+        arr[i] = pow(2, i);
     }
-
-    cout << endl;
 }
 
-void printArray(int arr[], unsigned size)
+void printArr(int* arr, short size)
 {
     for (size_t i = 0; i < size; i++)
     {
@@ -25,199 +24,252 @@ void printArray(int arr[], unsigned size)
 
 inline void task1()
 {
-    const unsigned size = 4;
-    double arr[size] = { 3.14, 9.8, 123.456, 42.0 };
+    int* arrPtr;
+    short n;
 
-    printArray(arr, size);
+    cout << "Enter array size: ";
+    cin >> n;
+
+    arrPtr = new int[n];
+
+    fillArrWithPowsOfTwo(arrPtr, n);
+
+    printArr(arrPtr, n);
+
+    delete[] arrPtr;
+    arrPtr = nullptr;
+}
+
+const short TASK_2_MATRIX_SIZE = 4;
+
+void initMatrix(int** matrix, short size)
+{
+    for (size_t i = 0; i < TASK_2_MATRIX_SIZE; i++)
+    {
+        matrix[i] = new int[TASK_2_MATRIX_SIZE];
+    }
+}
+
+void fillMatrixWithRands(int** matrix, short size)
+{
+    for (size_t i = 0; i < TASK_2_MATRIX_SIZE; i++)
+    {
+        for (size_t j = 0; j < TASK_2_MATRIX_SIZE; j++)
+        {
+            matrix[i][j] = rand() % 1000;
+        }
+    }
+}
+
+void printMatrix(int** matrix, short size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        for (size_t j = 0; j < size; j++)
+        {
+            cout << matrix[i][j] << " ";
+        }
+
+        cout << endl;
+    }
 
     cout << endl;
 }
 
-void inverseBinArray(int arr[], unsigned size)
+void deleteMatrix(int** matrix, short size)
 {
     for (size_t i = 0; i < size; i++)
     {
-        arr[i] = arr[i] == 1 ? 0 : 1;
+        delete[] matrix[i];
     }
+
+    delete[] matrix;
+    matrix = nullptr;
 }
 
 inline void task2()
 {
-    const unsigned size = 5;
-    int arr[size] = { 1, 0, 0, 1, 1 };
+    int** matrixPtr;
+    matrixPtr = new int* [TASK_2_MATRIX_SIZE];
 
-    printArray(arr, size);
-    inverseBinArray(arr, size);
-    printArray(arr, size);
+    initMatrix(matrixPtr, TASK_2_MATRIX_SIZE);
 
-    cout << endl;
+    fillMatrixWithRands(matrixPtr, TASK_2_MATRIX_SIZE);
+
+    printMatrix(matrixPtr, TASK_2_MATRIX_SIZE);
+
+    deleteMatrix(matrixPtr, TASK_2_MATRIX_SIZE);
 }
 
-const int TASK_3_ARR_SIZE = 8;
+const string TASK_3_SOME_TEXT[] = {
+    "For although a man is judged by his actions, by what he has said and done, ",
+    "a man judges himself by what he is willing to do, by what he might have said, ",
+    "or might have done – a judgment that is necessarily hampered, bot only by the scope ",
+    "and limits of his imagination, but by the ever-changing measure of his doubt and self-esteem."
+};
 
-bool fillArray(int* arr)
+void writeTextToFile(string filename)
 {
-    int newArr[] = { 1, 4, 7, 10, 13, 16, 19, 22 };
+    ofstream fout(filename);
 
-    for (size_t i = 0; i < TASK_3_ARR_SIZE; i++)
+    for (size_t i = 0; i < 4; i++)
     {
-        arr[i] = newArr[i];
+        fout << TASK_3_SOME_TEXT[i] << endl;
     }
 
-    return true;
+    fout.close();
 }
 
-inline void task3()
+void writeInvertTextToFile(string filename)
 {
-    int arr[TASK_3_ARR_SIZE];
+    ofstream fout(filename);
 
-    if (fillArray(arr))
+    for (size_t i = 0; i < 4; i++)
     {
-        cout << "Array successfully filled" << endl;
-        printArray(arr, TASK_3_ARR_SIZE);
+        fout << TASK_3_SOME_TEXT[3 - i] << endl;
     }
 
-    cout << endl;
+    fout.close();
 }
 
-const short TASK_4_ARR_SIZE = 10;
 
-// Алгоритм не работает для значений > TASK_4_ARR_SIZE
-void shiftArray(int* arr, short shift)
+struct Filenames
 {
-    int shiftedArr[TASK_4_ARR_SIZE];
+    string filename1;
+    string filename2;
+};
 
-    for (size_t i = 0; i < TASK_4_ARR_SIZE; i++)
+inline Filenames task3()
+{
+    string filename1, filename2;
+
+    while (true)
     {
-        if (shift > 0)
+        cout << "Enter filename 1: ";
+        cin >> filename1;
+
+        cout << "Enter filename 2: ";
+        cin >> filename2;
+
+        if (filename1 == filename2)
         {
-            if (i < shift)
-            {
-                shiftedArr[i] = arr[TASK_4_ARR_SIZE - (shift - i)];
-            }
-            else
-            {
-                shiftedArr[i] = arr[i - shift];
-            }
+            cout << "Filenames are identical" << endl;
+            continue;
         }
-        else
-        {
-            if (i - shift < TASK_4_ARR_SIZE)
-            {
-                shiftedArr[i] = arr[i - shift];
-            }
-            else
-            {
-                shiftedArr[i] = arr[- shift - (TASK_4_ARR_SIZE - i)];
-            }
-        }
+
+        break;
     }
 
-    for (size_t i = 0; i < TASK_4_ARR_SIZE; i++)
-    {
-        arr[i] = shiftedArr[i];
-    }
+    writeTextToFile(filename1);
+    writeInvertTextToFile(filename2);
+
+    // Возможно, это не очень правильно, но это избавляет от дублирования кода для 4 задания
+    Filenames filenames = { filename1, filename2 };
+
+    return filenames;
 }
 
 inline void task4()
 {
-    int arr[TASK_4_ARR_SIZE];
+    Filenames filenames = task3();
 
-    for (size_t i = 0; i < TASK_4_ARR_SIZE; i++)
+    string filename;
+
+    cout << "Enter result filename: ";
+    cin >> filename;
+
+    ifstream fin1(filenames.filename1);
+    ifstream fin2(filenames.filename2);
+
+    ofstream fout(filename);
+
+    if (fin1.is_open() && fin2.is_open())
     {
-        arr[i] = rand() % 100;
-    }
+        const size_t size = 255;
+        char buf[size];
 
-    cout << "Input array: " << endl;
-    printArray(arr, TASK_4_ARR_SIZE);
-
-    short shift;
-
-    cout << "Enter shift number: ";
-    cin >> shift;
-
-    shiftArray(arr, shift);
-
-    cout << "Shifted array: ";
-    printArray(arr, TASK_4_ARR_SIZE);
-
-    cout << endl;
-}
-
-const short TASK_5_ARR_SIZE = 5;
-
-int leftSum(int* arr, int index)
-{
-    int sum = 0;
-
-    for (size_t i = 0; i <= index; i++)
-    {
-        sum += arr[i];
-    }
-
-    return sum;
-}
-
-int rightSum(int* arr, int index)
-{
-    int sum = 0;
-
-    for (size_t i = index + 1; i < TASK_5_ARR_SIZE; i++)
-    {
-        sum += arr[i];
-    }
-
-    return sum;
-}
-
-bool checkBalance(int* arr)
-{
-    for (size_t i = 0; i < TASK_5_ARR_SIZE - 1; i++)
-    {
-        if (leftSum(arr, i) == rightSum(arr, i))
+        while (!fin1.eof())
         {
-            return true;
-        }
-    }
+            fin1.getline(buf, size);
 
-    return false;
+            fout << buf << endl;
+        }
+
+        while (!fin2.eof())
+        {
+            fin2.getline(buf, size);
+
+            fout << buf << endl;
+        }
+
+        fin1.close();
+        fin2.close();
+    }
+    else
+    {
+        cout << "Error: can not open file(s)" << endl;
+    }
+}
+
+bool isWordInFile(string word, string filename)
+{
+    string buf;
+
+    ifstream fin(filename);
+
+    if (fin.is_open())
+    {
+        while (!fin.eof())
+        {
+            fin >> buf;
+
+            if (buf == word)
+            {
+                fin.close();
+
+                return true;
+            }
+        }
+
+        fin.close();
+
+        return false;
+    }
+    else
+    {
+        cout << "Error: can not open file" << endl;
+    }
 }
 
 inline void task5()
 {
-    int arr1[] = { 1, 1, 1, 2, 1 };
-    int arr2[] = { 2, 1, 1, 2, 1 };
-    int arr3[] = { 10, 1, 2, 3, 4 };
-    int arr4[] = { 4, 5, 6, 10, 5 };
-    int arr5[] = { 20, 30, 40, 50, 60 };
+    string word, filename, buf;
 
-    const string isBalancedText = " Is balanced: ", trueText = "True", falseText = "False";
+    cout << "Enter a word: ";
+    cin >> word;
 
-    printArray(arr1, TASK_5_ARR_SIZE);
-    cout << isBalancedText << (checkBalance(arr1) ? trueText : falseText) << endl;
+    cout << "Enter a filename: ";
+    cin >> filename;
 
-    printArray(arr2, TASK_5_ARR_SIZE);
-    cout << isBalancedText << (checkBalance(arr2) ? trueText : falseText) << endl;
-
-    printArray(arr3, TASK_5_ARR_SIZE);
-    cout << isBalancedText << (checkBalance(arr3) ? trueText : falseText) << endl;
-
-    printArray(arr4, TASK_5_ARR_SIZE);
-    cout << isBalancedText << (checkBalance(arr4) ? trueText : falseText) << endl;
-
-    printArray(arr5, TASK_5_ARR_SIZE);
-    cout << isBalancedText << (checkBalance(arr5) ? trueText : falseText) << endl;
+    if (isWordInFile(word, filename))
+    {
+        cout << "Word is IN file" << endl;
+    }
+    else
+    {
+        cout << "Word is NOT IN file" << endl;
+    }
 }
 
 int main()
 {
-    task1();
+    //task1();
 
-    task2();
+    //task2();
 
-    task3();
+    //task3();
 
-    task4();
+    //task4();
 
     task5();
 
